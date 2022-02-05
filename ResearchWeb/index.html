@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>AP Research Sampling</title>
+</head>
+<body>
+    <div id="start-section">
+        <p>Please download this consent form, sign it, and send it back to <a href = "mailto:jocelynho@pacificamerican.org?subject=Consent to Participate Form">jocelynho@pacificamerican.org</a> before filling any forms.</p>
+        <a href="Consent to Participate Form.pdf" download="Consent to Participate Form.pdf">Download Consent to Participate Form</a>
+        <br>
+        <p>Please fill in this form before you click 'Start'</p>
+        <a href="https://forms.gle/BaBysB7vjGFGQ5PAA" target="_blank">Participant Information Form</a>
+        <button onclick="startSurvey()">Start</button>
+    </div>
+
+    <div id="sampling" style="display: none;">
+        <p id="sample-num">Sample 1</p>
+        <p>Please listen to the following sample and fill out the survey. Click 'Continue' after you submitted the survey.</p>
+        
+        <audio controls id="1" style="display: none;">
+            <source src="A1.mp3" type="audio/mpeg">
+        </audio>
+        <audio controls id="2" style="display: none;">
+            <source src="A2.mp3" type="audio/mpeg">
+        </audio>
+        <audio controls id="3" style="display: none;">
+            <source src="A3.mp3" type="audio/mpeg">
+        </audio>
+        <audio controls id="4" style="display: none;">
+            <source src="H1.mp3" type="audio/mpeg">
+        </audio>
+        <audio controls id="5" style="display: none;">
+            <source src="H2.mp3" type="audio/mpeg">
+        </audio>
+        <audio controls id="6" style="display: none;">
+            <source src="H3.mp3" type="audio/mpeg">
+        </audio>     
+        
+        <br>   
+        <p>Please fill in this survey.</p>
+        <a href="https://forms.gle/NnqHeUYDxGsVGewd8">Sample Survey</a>
+        <br>    
+        <button onclick="getNextSample()">Continue</button>
+    </div>
+    
+    <div id="last" style="display: none;">
+        <p id="identity-reveal"></p>
+        <a href="https://forms.gle/BaBysB7vjGFGQ5PAA" target="_blank">Change attitude towards AI</a>
+        <br>
+        <a href="https://forms.gle/NnqHeUYDxGsVGewd8">Change opinions towards any of the samples</a>
+        <br>
+        <button onclick="thankYou()">Continue</button>
+    </div>
+
+    <div id="thank-you" style="display: none;">
+        <p>Thank you for your cooperation.</p>
+    </div>
+
+    <script>
+        var isHuman = false;
+        function startSurvey(){
+            var max = 2;
+            var min = 1;
+            var num = Math.floor(Math.random() * (max - min + 1) ) + min;
+            //1 human 2 AI
+            if(num == 1){
+                randomNumber(4, 6);
+                isHuman = true;
+            }else{
+                randomNumber(1, 3);
+            }
+            document.getElementById("start-section").style.display = "none";
+            document.getElementById("sampling").style.display = "block";
+        }
+
+        var count = 0;
+        function getNextSample(){
+            if(isHuman){
+                randomNumber(1, 3);
+            }else{
+                randomNumber(4, 6);
+            }
+            count++;
+            document.getElementById("sample-num").innerHTML = "Sample 2";
+            if(count ==2){
+                //call next func
+                document.getElementById("sampling").style.display = "none";
+                document.getElementById("last").style.display = "block";
+                var order = "second";
+                if (!isHuman){
+                    order = "first";
+                }
+                document.getElementById("identity-reveal").innerHTML = "Now knowing the " + order + " sample is composed of AI, how would you change any of your responses?";
+            }
+        }
+
+        function thankYou(){
+            document.getElementById("thank-you").style.display = "block";
+            document.getElementById("last").style.display = "none";
+        }
+
+        var sampleIdx = -1;
+        function randomNumber(min, max){
+            var num = Math.floor(Math.random() * (max - min + 1) ) + min;
+            while (num == sampleIdx){
+                num = Math.floor(Math.random() * (max - min + 1) ) + min;
+            }
+            if(sampleIdx != -1){
+                document.getElementById(sampleIdx).style.display = "none";
+            }
+            sampleIdx = num;
+            switch(sampleIdx){
+                case 1:
+                    document.getElementById("1").style.display = "block";
+                    break;
+                case 2:
+                    document.getElementById("2").style.display = "block";
+                    break;
+                case 3:
+                    document.getElementById("3").style.display = "block";
+                    break;
+                case 4:
+                    document.getElementById("4").style.display = "block";
+                    break;
+                case 5:
+                    document.getElementById("5").style.display = "block";
+                    break;
+                case 6:
+                    document.getElementById("6").style.display = "block";
+                    break;
+            }
+        }
+        
+    </script>
+</body>
+</html>
